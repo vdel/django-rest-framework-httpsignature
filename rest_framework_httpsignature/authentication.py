@@ -60,10 +60,10 @@ class SignatureAuthentication(authentication.BaseAuthentication):
 
         # Sign string and compare.
         signer = HeaderSigner(
-            key_id=user_api_key, secret=user_secret,
+            key_id=user_api_key, secret=str(user_secret),
             headers=signature_headers, algorithm='hmac-sha256')
-        signed = signer.sign(unsigned, method=request.method, path=path)
-        return signed['authorization']
+        signed = signer.sign(unsigned)
+        return signed['Authorization']
 
     def fetch_user_data(self, api_key):
         """Retuns a tuple (User instance, API Secret) or None."""
