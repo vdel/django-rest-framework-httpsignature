@@ -84,7 +84,11 @@ class SignatureAuthentication(authentication.BaseAuthentication):
         sent_signature = self.get_signature_from_signature_string(sent_string)
 
         # Fetch credentials for API key from the data store.
-        user, secret = self.fetch_user_data(api_key)
+        data = self.fetch_user_data(api_key)
+        if data is None:
+            return None
+
+        user, secret = data
 
         # Build string to sign from "headers" part of Signature value.
         computed_string = self.build_signature(api_key, secret, request)
